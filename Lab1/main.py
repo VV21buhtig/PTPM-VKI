@@ -7,12 +7,12 @@ from config import setup_logging
 from triangle import process_request
 
 
-def main() -> None:
+def main() -> int:
     """Главная точка входа приложения."""
     if sys.stdout and hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
     if sys.stderr and hasattr(sys.stderr, "reconfigure"):
-        sys.stderr.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
     setup_logging()
     logging.info("Логгер успешно сконфигурирован")
     logging.info("Приложение запущено")
