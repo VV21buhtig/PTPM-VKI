@@ -7,7 +7,7 @@ class Converter:
             return int(x)
         elif x == 0.0:
             raise ValueError("x не может быть равен 0")
-        elif -30.5 <= x < 0:
+        elif x >= -30.5 and x != -30.4:   #ВОТ ЗДЕСЬ ПЕРЕСЕЧЕНИЕ ДИАПОЗОНОВ  В ЗАДАЧЕ.
             return int(x) - 5
         else:
             return -2000

@@ -20,3 +20,10 @@ class TestConverter(unittest.TestCase):
         self.assertEqual(Converter.do(-10.0), -15)
         self.assertEqual(Converter.do(-30.5), -35)
         self.assertEqual(Converter.do(-0.5), -5)
+
+    def test_below_minus_30_4(self):
+        self.assertEqual(Converter.do(-30.4), -2000)
+        self.assertEqual(Converter.do(-100.0), -2000)
+        self.assertEqual(Converter.do(-999.9), -2000)
+if __name__ == '__main__':
+    unittest.main()
