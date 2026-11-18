@@ -6,6 +6,7 @@
 """
 
 import os
+import time
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -19,6 +20,10 @@ class CalculatorPage:
         "BASE_URL", "https://www.globalsqa.com/angularJs-protractor/SimpleCalculator/"
     )
     DEFAULT_TIMEOUT = 5
+
+    # Пауза после каждого действия (секунды), чтобы видеть происходящее.
+    # Включается переменной окружения SLOWMO, например SLOWMO=0.5.
+    SLOWMO = float(os.getenv("SLOWMO", "0"))
 
     OPERATIONS = ("+", "-", "*", "/")
 
@@ -77,26 +82,31 @@ class CalculatorPage:
         if operation not in self.OPERATIONS:
             raise ValueError(f"Неподдерживаемая операция: {operation!r}")
         Select(self.__find(self.__OPERATION_SELECT)).select_by_value(operation)
+        self.__pause()
         return self
 
     def click_increment_first(self):
         """Нажимает кнопку '+1' рядом с первым числом."""
         self.__find(self.__INCREMENT_FIRST).click()
+        self.__pause()
         return self
 
     def click_decrement_first(self):
         """Нажимает кнопку '-1' рядом с первым числом."""
         self.__find(self.__DECREMENT_FIRST).click()
+        self.__pause()
         return self
 
     def click_increment_second(self):
         """Нажимает кнопку '+1' рядом со вторым числом."""
         self.__find(self.__INCREMENT_SECOND).click()
+        self.__pause()
         return self
 
     def click_decrement_second(self):
         """Нажимает кнопку '-1' рядом со вторым числом."""
         self.__find(self.__DECREMENT_SECOND).click()
+        self.__pause()
         return self
 
     # ------------------------------------------------------------------
@@ -171,3 +181,8 @@ class CalculatorPage:
         element = self.__find(locator)
         element.clear()
         element.send_keys(str(value))
+        self.__pause()
+
+    def __pause(self):
+        if self.SLOWMO > 0:
+            time.sleep(self.SLOWMO)

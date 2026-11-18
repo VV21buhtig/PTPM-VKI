@@ -44,16 +44,18 @@ def detect_chrome_binary():
 def create_driver():
     """Создаёт новый экземпляр Chrome WebDriver.
 
-    Переменные окружения:
-        CHROME_BINARY — путь к бинарнику браузера;
-        HEADLESS=0    — запустить браузер с окном (по умолчанию headless).
+    По умолчанию браузер открывается видимым окном, чтобы было видно
+    происходящее. Переменные окружения:
+        HEADLESS=1    — запустить браузер без окна;
+        CHROME_BINARY — путь к бинарнику браузера.
     """
     options = webdriver.ChromeOptions()
 
-    if os.getenv("HEADLESS", "1") != "0":
+    if os.getenv("HEADLESS", "0") == "1":
         options.add_argument("--headless=new")
-
-    options.add_argument("--window-size=1440,1000")
+        options.add_argument("--window-size=1440,1000")
+    else:
+        options.add_argument("--start-maximized")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
 
