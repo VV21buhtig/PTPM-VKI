@@ -18,7 +18,7 @@ class CalculatorPage:
     URL = os.getenv(
         "BASE_URL", "https://www.globalsqa.com/angularJs-protractor/SimpleCalculator/"
     )
-    DEFAULT_TIMEOUT = 15
+    DEFAULT_TIMEOUT = 5
 
     OPERATIONS = ("+", "-", "*", "/")
 
@@ -134,6 +134,14 @@ class CalculatorPage:
     # ------------------------------------------------------------------
     # Составные сценарии
     # ------------------------------------------------------------------
+    def reset(self):
+        """Возвращает калькулятор в исходное состояние без перезагрузки."""
+        self.enter_first_number(0)
+        self.enter_second_number(0)
+        self.select_operation("+")
+        self.wait_for_result("0")
+        return self
+
     def calculate(self, first, second, operation, expected=None, timeout=None):
         """Вводит операнды, выбирает операцию и возвращает результат.
 

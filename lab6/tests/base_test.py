@@ -75,15 +75,17 @@ def create_driver():
         options.binary_location = binary_path
 
     # Selenium Manager сам подберёт и скачает подходящий chromedriver.
-    return webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(options=options)
+    driver.set_page_load_timeout(15)
+    return driver
 
 
 class BaseUITest(unittest.TestCase):
-    """Общая инициализация: один браузер на класс, чистая страница на тест.
+    """Общая инициализация: один браузер и одна вкладка на весь класс.
 
-    Браузер поднимается в setUpClass() и закрывается в tearDownClass(),
-    а перед каждым тестом страница открывается заново — тесты не влияют
-    друг на друга и могут запускаться по отдельности.
+    Страница открывается один раз в setUpClass(), а перед каждым тестом
+    калькулятор сбрасывается в исходное состояние (0 + 0 = 0). Тесты
+    не зависят друг от друга и могут запускаться по отдельности.
     """
 
     page_class = None
@@ -91,6 +93,7 @@ class BaseUITest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.driver = create_driver()
+        cls.page = cls.page_class(cls.driver).open()
 
     @classmethod
     def tearDownClass(cls):
@@ -99,5 +102,5 @@ class BaseUITest(unittest.TestCase):
     def setUp(self):
         if self.page_class is None:
             self.fail("В тестовом классе не задан page_class")
-        self.driver.delete_all_cookies()
-        self.page = self.page_class(self.driver).open()
+        self.page = type(self).page
+        self.page.reset()
